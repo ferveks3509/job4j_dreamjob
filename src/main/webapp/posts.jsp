@@ -46,6 +46,7 @@
                             <%=post.getName()%>
                         </td>
                     </tr>
+                    <% } %>
                     </tbody>
                 </table>
             </div>

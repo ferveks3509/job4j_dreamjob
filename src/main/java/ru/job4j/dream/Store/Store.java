@@ -50,8 +50,15 @@ public class Store {
     public Post findById(int id) {
         return posts.get(id);
     }
-    public void saveCandidate(Candidate candidate) {
-        candidate.setId(CANDIDATE_ID.incrementAndGet());
+
+    public void save(Candidate candidate) {
+        if (candidate.getId() == 0) {
+            candidate.setId(CANDIDATE_ID.incrementAndGet());
+        }
         candidates.put(candidate.getId(), candidate);
+    }
+
+    public Candidate findByIdCandidate(int id) {
+        return candidates.get(id);
     }
 }
