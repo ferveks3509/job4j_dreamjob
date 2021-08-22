@@ -2,6 +2,7 @@
 <%@ page import="ru.job4j.dream.Store.Store" %>
 <%@ page import="ru.job4j.dream.model.Candidate" %>
 <%@ page import="ru.job4j.dream.model.Post" %>
+<%@ page import="java.util.Collection" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -38,13 +39,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <% for (Post post : Store.instOf().findAllPosts()) { %>
+                    <% for (Candidate candidate : (Collection<Candidate>) request.getAttribute("candidates")) { %>
                     <tr>
                         <td>
-                            <a href="<%=request.getContextPath()%>/candidate/edit.jsp?id=<%=post.getId()%>">
+                            <a href="<%=request.getContextPath()%>/candidate/edit.jsp?id=<%=candidate.getId()%>">
                                 <i class="fa fa-edit mr-3"></i>
                             </a>
-                            <%=post.getName()%>
+                            <%=candidate.getName()%>
                         </td>
                     </tr>
                     <% } %>
