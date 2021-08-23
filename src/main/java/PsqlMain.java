@@ -1,0 +1,15 @@
+import ru.job4j.dream.Store.PsqlStore;
+import ru.job4j.dream.Store.Store;
+import ru.job4j.dream.model.Post;
+
+public class PsqlMain {
+    public static void main(String[] args) {
+        Store store = PsqlStore.instOf();
+        store.save(new Post(0, "Java Job"));
+        for (Post post : store.findAllPosts()) {
+            System.out.println(post.getId() + " " + post.getName());
+        }
+        System.out.println(store.findById(1).getId() + " " + store.findById(1).getName());
+        store.findAllCandidates();
+    }
+}

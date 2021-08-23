@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="ru.job4j.dream.Store.Store" %>
+<%@ page import="ru.job4j.dream.Store.MemStore" %>
 <%@ page import="ru.job4j.dream.model.Candidate" %>
 <%@ page import="ru.job4j.dream.model.Post" %>
 <%@ page import="java.util.Collection" %>
