@@ -1,5 +1,6 @@
 import ru.job4j.dream.Store.PsqlStore;
 import ru.job4j.dream.Store.Store;
+import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
 
 public class PsqlMain {
@@ -9,7 +10,11 @@ public class PsqlMain {
         for (Post post : store.findAllPosts()) {
             System.out.println(post.getId() + " " + post.getName());
         }
-        System.out.println(store.findById(1).getId() + " " + store.findById(1).getName());
-        store.findAllCandidates();
+        System.out.println("Find by id post: " + store.findById(0).getId() + " " + store.findById(0).getName());
+        store.save(new Candidate(0, "candidate"));
+        for(Candidate candidate : store.findAllCandidates()) {
+            System.out.println(candidate.getId() + " " + candidate.getName());
+        }
+        System.out.println("find candidate by id: " + store.findByIdCandidate(0).getId() + " " + store.findByIdCandidate(0).getName());
     }
 }
