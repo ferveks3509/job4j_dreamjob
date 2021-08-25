@@ -10,11 +10,11 @@ public class PsqlMain {
         for (Post post : store.findAllPosts()) {
             System.out.println(post.getId() + " " + post.getName());
         }
-        System.out.println("Find by id post: " + store.findById(0).getId() + " " + store.findById(0).getName());
+        System.out.println("Find by id post: " + store.findById(42).getId() + " " + store.findById(42).getName());
         store.save(new Candidate(0, "candidate"));
         for(Candidate candidate : store.findAllCandidates()) {
             System.out.println(candidate.getId() + " " + candidate.getName());
         }
-        System.out.println("find candidate by id: " + store.findByIdCandidate(0).getId() + " " + store.findByIdCandidate(0).getName());
+        System.out.println("find candidate by id: " + store.findByIdCandidate(47).getId() + " " + store.findByIdCandidate(47).getName());
     }
 }

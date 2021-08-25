@@ -27,12 +27,12 @@ public class PsqlStore implements Store {
         )) {
             cfg.load(io);
         } catch (Exception e) {
-            LOG.error("Exception", e);
+            LOG.error("File not found exception", e);
         }
         try {
             Class.forName(cfg.getProperty("jdbc.driver"));
         } catch (Exception e) {
-            LOG.error("Exception", e);
+            LOG.error("class not found exception", e);
         }
         pool.setDriverClassName(cfg.getProperty("jdbc.driver"));
         pool.setUrl(cfg.getProperty("jdbc.url"));
@@ -55,16 +55,14 @@ public class PsqlStore implements Store {
     public Collection<Post> findAllPosts() {
         List<Post> posts = new ArrayList<>();
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("select * from post")) {
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM post")) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    posts.add(new Post(
-                            it.getInt("id"),
-                            it.getString("name")));
+                    posts.add(new Post(it.getInt("id"), it.getString("name")));
                 }
             }
         } catch (Exception e) {
-            LOG.error("Exception", e);
+            LOG.error("error posts not found", e);
         }
         return posts;
     }
@@ -72,17 +70,15 @@ public class PsqlStore implements Store {
     @Override
     public Collection<Candidate> findAllCandidates() {
         List<Candidate> candidates = new ArrayList<>();
-        try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("select * from candidate")) {
-            try (ResultSet it = ps.executeQuery()) {
-                while (it.next()) {
-                    candidates.add(new Candidate(
-                            it.getInt("id"),
-                            it.getString("name")));
+        try(Connection cn = pool.getConnection();
+        PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate")) {
+            try(ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    candidates.add(new Candidate(rs.getInt("id"), rs.getString("name")));
                 }
             }
         } catch (Exception e) {
-            LOG.error("Exception", e);
+            LOG.error("error candidates not found", e);
         }
         return candidates;
     }
@@ -105,28 +101,9 @@ public class PsqlStore implements Store {
         }
     }
 
-    private Candidate createCandidate(Candidate candidate) {
-        try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("insert into candidate(name) VALUES (?)",
-                     PreparedStatement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, candidate.getName());
-            ps.execute();
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    candidate.setId(rs.getInt(1));
-                }
-            }
-        } catch (Exception e) {
-            LOG.error("Exception", e);
-        }
-        return candidate;
-    }
-
-
     private Post create(Post post) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("insert into post(name) VALUES (?)",
-                     PreparedStatement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO post(name) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, post.getName());
             ps.execute();
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -135,66 +112,87 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            LOG.error("Exception", e);
+            LOG.error("error post not create", e);
         }
         return post;
     }
 
-    private void updateCandidate(Candidate candidate) {
+    private Candidate createCandidate(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("update candidate SET name = ? where id = ?")) {
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate(name) VALUES(?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, candidate.getName());
-            ps.setInt(2, candidate.getId());
-        } catch (Exception e) {
-            LOG.error("exception", e);
-        }
-    }
-
-    private void update(Post post) {
-        try (Connection cn = pool.getConnection();
-             PreparedStatement statement = cn.prepareStatement("update post set name = ? where id = ?")) {
-            statement.setString(1, post.getName());
-            statement.setInt(2, post.getId());
-        } catch (Exception e) {
-            LOG.error("Exception", e);
-        }
-
-    }
-
-    @Override
-    public Candidate findByIdCandidate(int id) {
-        Candidate candidate = new Candidate(0, "");
-        try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("select * from candidate where id = ?")) {
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
+            ps.execute();
+            try(ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    candidate.setId(rs.getInt("id"));
-                    candidate.setName("name");
+                    candidate.setId(rs.getInt(1));
                 }
             }
         } catch (Exception e) {
-            LOG.error("Exception", e);
+            LOG.error("error candidate not create",e);
         }
         return candidate;
     }
 
+    private void update(Post post) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("UPDATE post SET name = ? where id = ?")) {
+            ps.setString(1, post.getName());
+            ps.setInt(2, post.getId());
+            ps.execute();
+        } catch (Exception e) {
+            LOG.error("error post not update", e);
+        }
+    }
+    private void updateCandidate(Candidate candidate) {
+        try(Connection cn = pool.getConnection();
+        PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET name = ? where id = ?")) {
+            ps.setString(1, candidate.getName());
+            ps.setInt(2, candidate.getId());
+            ps.execute();
+        } catch (Exception e) {
+            LOG.error("error candidate update", e);
+        }
+    }
+
+
     @Override
     public Post findById(int id) {
-        Post post = new Post(0,"");
+        Post post = null;
         try (Connection cn = pool.getConnection();
-             PreparedStatement statement = cn.prepareStatement("select * from post where id = ?")) {
-            statement.setInt(1, id);
-            try (ResultSet rs = statement.executeQuery()) {
+             PreparedStatement ps = cn.prepareStatement("SELECT * from post where id = ?")) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    post.setId(rs.getInt("id"));
-                    post.setName(rs.getString("name"));
+                    post = new Post(
+                            rs.getInt("id"),
+                            rs.getString("name")
+                    );
                 }
             }
-
         } catch (Exception e) {
-            LOG.error("Exception", e);
+            LOG.error("error post witch this id not found", e);
         }
         return post;
     }
+
+    @Override
+    public Candidate findByIdCandidate(int id) {
+        Candidate candidate = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate where id = ?")) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    candidate = new Candidate(
+                            rs.getInt("id"),
+                            rs.getString("name")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("error candidate witch this id not found", e);
+        }
+        return candidate;
+    }
 }
+
