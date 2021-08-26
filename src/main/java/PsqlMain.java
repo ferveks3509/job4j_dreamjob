@@ -2,6 +2,7 @@ import ru.job4j.dream.Store.PsqlStore;
 import ru.job4j.dream.Store.Store;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
+import ru.job4j.dream.model.User;
 
 public class PsqlMain {
     public static void main(String[] args) {
@@ -16,5 +17,10 @@ public class PsqlMain {
             System.out.println(candidate.getId() + " " + candidate.getName());
         }
         System.out.println("find candidate by id: " + store.findByIdCandidate(47).getId() + " " + store.findByIdCandidate(47).getName());
+        store.save(new User(0,"user"));
+        for (User user : store.findAllUsers()) {
+            System.out.println(user.getId() + " " + user.getName());
+        }
+        System.out.println("find user by id: " + store.findByIdUser(1).getId() + " " + store.findByIdUser(1).getName());
     }
 }

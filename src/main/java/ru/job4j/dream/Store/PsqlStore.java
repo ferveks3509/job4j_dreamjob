@@ -5,6 +5,7 @@ import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import ru.job4j.dream.model.User;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -84,6 +85,22 @@ public class PsqlStore implements Store {
     }
 
     @Override
+    public Collection<User> findAllUsers() {
+        List<User> users = new ArrayList<>();
+        try(Connection cn = pool.getConnection();
+        PreparedStatement ps = cn.prepareStatement("SELECT * FROM users")) {
+            try(ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    users.add(new User(rs.getInt("id"), rs.getString("name")));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("error users not found", e);
+        }
+        return users;
+    }
+
+    @Override
     public void save(Post post) {
         if (post.getId() == 0) {
             create(post);
@@ -99,6 +116,30 @@ public class PsqlStore implements Store {
         } else {
             updateCandidate(candidate);
         }
+    }
+
+    @Override
+    public void save(User user) {
+        if (user.getId() == 0) {
+            createUser(user);
+        } else {
+            updateUser(user);
+        }
+    }
+    private User createUser(User user) {
+        try(Connection cn = pool.getConnection();
+        PreparedStatement ps = cn.prepareStatement("INSERT INTO users(name) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, user.getName());
+            ps.execute();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    user.setId(rs.getInt(1));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("error user not create", e);
+        }
+        return user;
     }
 
     private Post create(Post post) {
@@ -153,6 +194,16 @@ public class PsqlStore implements Store {
             LOG.error("error candidate update", e);
         }
     }
+    private void updateUser(User user) {
+        try(Connection cn = pool.getConnection();
+        PreparedStatement ps = cn.prepareStatement("UPDATE users SET name = ? where id = ?")) {
+            ps.setString(1, user.getName());
+            ps.setInt(2, user.getId());
+            ps.execute();
+        } catch (Exception e) {
+            LOG.error("error user not update", e);
+        }
+    }
 
 
     @Override
@@ -193,6 +244,26 @@ public class PsqlStore implements Store {
             LOG.error("error candidate witch this id not found", e);
         }
         return candidate;
+    }
+
+    @Override
+    public User findByIdUser(int id) {
+        User user = null;
+        try(Connection cn = pool.getConnection();
+        PreparedStatement ps = cn.prepareStatement("SELECT * FROM users where id = ?")) {
+            ps.setInt(1, id);
+            try(ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    user = new User(
+                            rs.getInt("id"),
+                            rs.getString("name")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("error user witch this id not found");
+        }
+        return user;
     }
 }
 
