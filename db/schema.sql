@@ -11,5 +11,7 @@ create table post
 create table users
 (
     id   serial primary key,
-    name text
+    name text,
+    email text,
+    password text
 );

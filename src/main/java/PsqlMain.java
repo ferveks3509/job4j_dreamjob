@@ -17,7 +17,7 @@ public class PsqlMain {
             System.out.println(candidate.getId() + " " + candidate.getName());
         }
         System.out.println("find candidate by id: " + store.findByIdCandidate(47).getId() + " " + store.findByIdCandidate(47).getName());
-        store.save(new User(0,"user"));
+        store.save(new User(0,"user", "email", "password"));
         for (User user : store.findAllUsers()) {
             System.out.println(user.getId() + " " + user.getName());
         }

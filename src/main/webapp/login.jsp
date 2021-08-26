@@ -5,7 +5,6 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -15,12 +14,39 @@
           integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
           integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
   <title>Работа мечты</title>
 </head>
 <body>
 <div class="container pt-3">
-
+  <div class="row">
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link" href="<%=request.getContextPath()%>/posts.do">Вакансии</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<%=request.getContextPath()%>/candidates.do">Кандидаты</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<%=request.getContextPath()%>/post/edit.jsp">Добавить вакансию</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<%=request.getContextPath()%>/candidate/edit.jsp">Добавить кандидата</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<%=request.getContextPath()%>/reg.jsp">Регистрация</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp">
+          <c:if test="${user == null}">
+            <c:out value="Войти"/>
+          </c:if>
+          <c:if test="${user != null}">
+            <c:out value="${user.name}"/> | Выйти
+          </c:if>
+        </a>
+      </li>
+    </ul>
+  </div>
   <div class="row">
     <div class="card" style="width: 100%">
       <div class="card-header">
@@ -34,15 +60,20 @@
           </div>
           <div class="form-group">
             <label>Пароль</label>
-            <input type="text" class="form-control" name="password">
+            <input type="password" class="form-control" name="password">
           </div>
           <button type="submit" class="btn btn-primary">Войти</button>
-          <c:if test="${not empty error}">
+          <c:if test="${requestScope.error != null}">
             <div style="color:red; font-weight: bold; margin: 30px 0;">
-                ${error}
+              <c:out value="${requestScope.error}"/>
             </div>
           </c:if>
+
         </form>
+        <br>
+        <a href="<%=request.getContextPath()%>/reg.jsp" class="btn btn-success" role="button">
+          Регистрация
+        </a>
       </div>
     </div>
   </div>

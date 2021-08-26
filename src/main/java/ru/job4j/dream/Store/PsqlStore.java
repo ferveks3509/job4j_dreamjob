@@ -59,7 +59,10 @@ public class PsqlStore implements Store {
              PreparedStatement ps = cn.prepareStatement("SELECT * FROM post")) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    posts.add(new Post(it.getInt("id"), it.getString("name")));
+                    posts.add(
+                            new Post(
+                                    it.getInt("id"),
+                                    it.getString("name")));
                 }
             }
         } catch (Exception e) {
@@ -75,7 +78,10 @@ public class PsqlStore implements Store {
         PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate")) {
             try(ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    candidates.add(new Candidate(rs.getInt("id"), rs.getString("name")));
+                    candidates.add(
+                            new Candidate(
+                                    rs.getInt("id"),
+                                    rs.getString("name")));
                 }
             }
         } catch (Exception e) {
@@ -91,7 +97,12 @@ public class PsqlStore implements Store {
         PreparedStatement ps = cn.prepareStatement("SELECT * FROM users")) {
             try(ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    users.add(new User(rs.getInt("id"), rs.getString("name")));
+                    users.add(
+                            new User(
+                                    rs.getInt("id"),
+                                    rs.getString("name"),
+                                    rs.getString("email"),
+                                    rs.getString("password")));
                 }
             }
         } catch (Exception e) {
@@ -128,8 +139,11 @@ public class PsqlStore implements Store {
     }
     private User createUser(User user) {
         try(Connection cn = pool.getConnection();
-        PreparedStatement ps = cn.prepareStatement("INSERT INTO users(name) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
+        PreparedStatement ps = cn.prepareStatement("INSERT INTO users(name, email, password) VALUES (?, ?, ?)",
+                PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
             ps.execute();
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
@@ -196,9 +210,11 @@ public class PsqlStore implements Store {
     }
     private void updateUser(User user) {
         try(Connection cn = pool.getConnection();
-        PreparedStatement ps = cn.prepareStatement("UPDATE users SET name = ? where id = ?")) {
+        PreparedStatement ps = cn.prepareStatement("UPDATE users SET name = ?, email = ?, password = ? where id = ?")) {
             ps.setString(1, user.getName());
-            ps.setInt(2, user.getId());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setInt(4, user.getId());
             ps.execute();
         } catch (Exception e) {
             LOG.error("error user not update", e);
@@ -256,12 +272,36 @@ public class PsqlStore implements Store {
                 if (rs.next()) {
                     user = new User(
                             rs.getInt("id"),
-                            rs.getString("name")
+                            rs.getString("name"),
+                            rs.getString("email"),
+                            rs.getString("password")
                     );
                 }
             }
         } catch (Exception e) {
             LOG.error("error user witch this id not found");
+        }
+        return user;
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        User user = null;
+        try(Connection cn = pool.getConnection();
+        PreparedStatement ps = cn.prepareStatement("SELECT * from users where email = ?")) {
+            ps.setString(1, email);
+            try(ResultSet rs = ps.executeQuery()) {
+                if(rs.next()) {
+                    user = new User(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("email"),
+                            rs.getString("password")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("error user witch this email not found");
         }
         return user;
     }
