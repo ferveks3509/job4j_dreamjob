@@ -11,16 +11,14 @@ import java.io.IOException;
 public class DownloadServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String name = req.getParameter("name");
-        File downloadFile = null;
-        File dir = new File("c:\\images");
-        if(dir.exists() && dir.getName().equals(name)) {
-            downloadFile = dir;
+        File image = null;
+        for (File file : new File("/Users/ilya/IdeaProjects/job4j_dreamjob/images").listFiles()) {
+            if (file.getName().startsWith(req.getParameter("id"))) {
+                image = file;
+                break;
+            }
         }
-
-        resp.setContentType("application/octet-stream");
-        resp.setHeader("Content-Disposition", "attachment; filename=\"" + downloadFile.getName() + "\"");
-        try (FileInputStream stream = new FileInputStream(downloadFile)) {
+        try (FileInputStream stream = new FileInputStream(image)) {
             resp.getOutputStream().write(stream.readAllBytes());
         }
     }
