@@ -2,6 +2,7 @@ package ru.job4j.dream.servlet;
 
 import ru.job4j.dream.Store.MemStore;
 import ru.job4j.dream.Store.PsqlStore;
+import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
 
 import javax.servlet.ServletException;
@@ -21,7 +22,7 @@ public class CandidateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         PsqlStore.instOf().save(
-                new Post(
+                new Candidate(
                         Integer.valueOf(req.getParameter("id")),
                         req.getParameter("name")
                 )
