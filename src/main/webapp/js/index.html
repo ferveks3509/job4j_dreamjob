@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        function validate() {
+            if ($('#name').val() == '') {
+                alert($('#name').attr('title'));
+            } else if ($('#lastName').val() == '') {
+                alert($('#lastName').attr('title'));
+            } else if ($('#sex').val() == '') {
+                alert($('#sex').attr('title'));
+            } else if ($('#desc').val() == '') {
+                alert($('#desc').attr('title'))
+            }
+            return false;
+        }
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="card" style="width: 100%">
+            <h2>Регистрация</h2>
+            <form>
+                <div class="form-group">
+                    <label>Name:</label>
+                    <input type="text" class="form-control" title="Enter user name." id="name">
+                </div>
+                <div class="form-group">
+                    <label>LastName:</label>
+                    <input type="text" class="form-control" title="Enter last name" id="lastName">
+                </div>
+                <div class="form-group">
+                    <label>Sex:</label>
+                    <input type="text" class="form-control" title="Enter sex" id="sex">
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <input type="text" class="form-control" title="Enter desc" id="desc">
+                </div>
+                <button type="button" class="btn btn-default" onclick="return validate();">Submit</button>
+            </form>
+        </div>
+    </div>
+    <table class="table table-dark">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">LastName</th>
+            <th scope="col">Sex</th>
+            <th scope="col">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Ivan</td>
+            <td>Ivanov</td>
+            <td>Man</td>
+            <td>Desc</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
