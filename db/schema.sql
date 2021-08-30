@@ -12,6 +12,6 @@ create table users
 (
     id   serial primary key,
     name text,
-    email text,
+    email text unique,
     password text
 );

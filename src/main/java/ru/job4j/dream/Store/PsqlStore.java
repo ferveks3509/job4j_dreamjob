@@ -283,7 +283,6 @@ public class PsqlStore implements Store {
         }
         return user;
     }
-
     @Override
     public User findByEmail(String email) {
         User user = null;
