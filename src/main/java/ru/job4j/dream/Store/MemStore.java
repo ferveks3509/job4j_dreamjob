@@ -3,6 +3,10 @@ package ru.job4j.dream.Store;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
@@ -60,5 +64,15 @@ public class MemStore {
 
     public Candidate findByIdCandidate(int id) {
         return candidates.get(id);
+    }
+
+    public void deleteCandidate(int id) {
+        candidates.remove(id);
+        String path = "c:\\images\\" + id;
+        try {
+            Files.deleteIfExists(Paths.get(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

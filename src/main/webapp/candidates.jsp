@@ -68,7 +68,13 @@
                                 <c:out value="${candidate.name}"/>
                             </td>
                             <td>
-                                <img src="">
+                                <img src="<c:url value='/download?name=${candidate.id}'/>" width="100px" height="100px"/>
+                            </td>
+                            <td>
+                                <a href="<c:url value='/upload.jsp?name=${candidate.id}'/>">Добавить</a>
+                            </td>
+                            <td>
+                                <a href="<c:url value='/deleteCandidate?name=${candidate.id}'/>">Удалить</a>
                             </td>
                         </tr>
                     </c:forEach>
