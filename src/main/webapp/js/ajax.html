@@ -20,20 +20,22 @@
     <script>
         function sendGreeting() {
             $.ajax({
-                type: 'GET',
-                url: 'http://localhost:8080/dreamjob/greet',
-                data: 'name=' + $('#email').val(),
-                dataType: 'text'
-            }).done(function(data) {
-                alert(data);
-            }).fail(function(err){
-                alert(err);
+                type: 'POST',
+                url: 'http://localhost:8080/job4j_dreamjob_war_exploded/items/greet',
+                data: JSON.stringify({
+                    name: $('#exampleInputEmail1').val()
+                }),
+                dataType: 'json'
+            }).done(function (data) {
+                $('#emailList li:last').append(`<li>${data.name}</li>`)
+            }).fail(function (err) {
+                console.log(err);
             });
         }
         $(document).ready(function () {
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/dreamjob/greet',
+                url: 'http://localhost:8080/job4j_dreamjob_war_exploded/items/greet',
                 dataType: 'json'
             }).done(function (data) {
                 for (var email of data) {
