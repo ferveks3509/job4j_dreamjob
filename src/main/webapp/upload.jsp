@@ -18,6 +18,7 @@
         <tr>
             <th>URL</th>
             <th>View</th>
+            <th><a href="<%=request.getContextPath()%>/index.do">Главная</a></th>
         </tr>
         </thead>
         <tbody>
