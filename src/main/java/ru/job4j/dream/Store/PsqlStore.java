@@ -208,6 +208,7 @@ public class PsqlStore implements Store {
             LOG.error("error candidate update", e);
         }
     }
+
     private void updateUser(User user) {
         try(Connection cn = pool.getConnection();
         PreparedStatement ps = cn.prepareStatement("UPDATE users SET name = ?, email = ?, password = ? where id = ?")) {
@@ -303,6 +304,16 @@ public class PsqlStore implements Store {
             LOG.error("error user witch this email not found");
         }
         return user;
+    }
+    @Override
+    public void deleteCandidate(int id) {
+        try(Connection cn = pool.getConnection();
+            PreparedStatement ps = cn.prepareStatement("DELETE from candidate where id = ?")) {
+            ps.setInt(1, id);
+            ps.execute();
+        } catch (Exception e) {
+            LOG.error("error delete candidate", e);
+        }
     }
 }
 

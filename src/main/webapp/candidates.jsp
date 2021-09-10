@@ -50,24 +50,34 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th scope="col">Названия</th>
-                        <th scope="col">Фото</th>
+                        <th scope="col">Имя кандидата</th>
+                        <th scope="col">Редактировать кандидата</th>
+                        <th scope="col">Фото кандидата</th>
+                        <th scope="col">Редактировать фото кандидата</th>
                     </tr>
                     </thead>
                     <tbody>
                     <c:forEach items="${candidates}" var="candidate">
                         <tr>
                             <td>
-                                <a href='<c:url value="/candidate/edit.jsp?id=${candidate.id}"/>'>
-                                    <i class="fa fa-edit mr-3"></i>
-                                </a>
                                 <c:out value="${candidate.name}"/>
                             </td>
                             <td>
-                                <img src="<c:url value='/download?name=${candidate.id}'/>" width="100px" height="100px"/>
+                                <a href='<c:url value="/candidate/edit.jsp?id=${candidate.id}"/>'>
+                                <i>Редактировать</i>
+                                    /
+                                    <a href='<c:url value="/deleteCandidate?id=${candidate.id}"/>'>
+                                        <i>Удалить</i>
+                                    </a>
+                                </a>
+
                             </td>
                             <td>
-                                <a href="<c:url value='/upload.jsp?name=${candidate.id}'/>">Добавить</a>
+                                <img src="<c:url value='/download?name=${image}'/>" width="100px" height="100px"/>
+                            </td>
+                            <td>
+
+                                <a href="<c:url value='/upload.jsp?id=${candidate.id}'/>">Добавить</a>
                             </td>
                             <td>
                                 <a href="<c:url value='/deleteCandidate?name=${candidate.id}'/>">Удалить</a>

@@ -1,3 +1,5 @@
+<%@ page import="ru.job4j.dream.model.Candidate" %>
+<%@ page import="ru.job4j.dream.Store.MemStore" %>
 <%@ page language="java" pageEncoding="UTF-8" session="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <!DOCTYPE html>
@@ -11,7 +13,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-
 <div class="container">
     <table class="table">
         <thead>
@@ -33,7 +34,7 @@
         </tbody>
     </table>
     <h2>Upload image</h2>
-    <form action="<c:url value='/upload'/>" method="post" enctype="multipart/form-data">
+    <form action="<c:url value='/upload?id=${candidate.id}'/>" method="post" enctype="multipart/form-data">
         <div class="checkbox">
             <input type="file" name="file">
         </div>

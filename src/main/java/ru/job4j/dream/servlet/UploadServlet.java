@@ -4,6 +4,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import ru.job4j.dream.Store.MemStore;
+import ru.job4j.dream.model.Candidate;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -17,21 +19,21 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 public class UploadServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<String> images = new ArrayList<>();
-        for(File name : new File("c:\\images").listFiles()) {
+        for (File name : new File("c:\\images").listFiles()) {
             images.add(name.getName());
         }
         req.setAttribute("images", images);
-        RequestDispatcher dispatcher =req.getRequestDispatcher("/upload.jsp");
-        dispatcher.forward(req,resp);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/upload.jsp");
+        dispatcher.forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("image/png");
         DiskFileItemFactory factory = new DiskFileItemFactory();
         ServletContext servletContext = this.getServletConfig().getServletContext();
         File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
@@ -45,7 +47,10 @@ public class UploadServlet extends HttpServlet {
             }
             for (FileItem item : items) {
                 if (!item.isFormField()) {
-                    File file = new File(folder + File.separator + item.getName());
+                    File file = new File(folder
+                            + File.separator
+                            + req.getParameter("id")
+                            + item.getName().substring(item.getName().indexOf(".")));
                     try (FileOutputStream out = new FileOutputStream(file)) {
                         out.write(item.getInputStream().readAllBytes());
                     }
