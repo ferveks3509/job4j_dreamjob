@@ -6,7 +6,7 @@ import ru.job4j.dream.model.User;
 
 import java.util.Collection;
 
-public interface Store {
+public interface Store<T> {
     Collection<Post> findAllPosts();
 
     Collection<Candidate> findAllCandidates();
