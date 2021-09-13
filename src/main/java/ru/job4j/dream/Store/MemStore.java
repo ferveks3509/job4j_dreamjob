@@ -17,26 +17,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MemStore implements Store {
     private static final MemStore INST = new MemStore();
 
-    private static AtomicInteger POST_ID = new AtomicInteger(4);
-    private static AtomicInteger CANDIDATE_ID = new AtomicInteger(4);
+    private static AtomicInteger POST_ID = new AtomicInteger();
+    private static AtomicInteger CANDIDATE_ID = new AtomicInteger();
     private static AtomicInteger USER_ID = new AtomicInteger();
 
-    private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
-    private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
-    private final Map<Integer, User> users = new ConcurrentHashMap<>();
-
-
-    private MemStore() {
-        posts.put(1, new Post(1, "Junior Java Job", "developer",
-                LocalDateTime.of(2021, 8, 15, 20, 00)));
-        posts.put(2, new Post(2, "Middle Java Job", "developer",
-                LocalDateTime.of(2021, 8, 16, 20, 00)));
-        posts.put(3, new Post(3, "Senior Java Job", "developer",
-                LocalDateTime.of(2021, 8, 16, 20, 00)));
-        candidates.put(1, new Candidate(1, "Junior Java"));
-        candidates.put(2, new Candidate(2, "Middle Java"));
-        candidates.put(3, new Candidate(3, "Senior Java"));
+    private  Map<Integer, Post> posts = new ConcurrentHashMap<>();
+    private  Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
+    {
+        candidates.put(0, new Candidate(1,"name"));
     }
+    private  Map<Integer, User> users = new ConcurrentHashMap<>();
+
+
 
     @Override
     public Collection<User> findAllUsers() {
@@ -82,10 +74,7 @@ public class MemStore implements Store {
     }
 
     public void save(Post post) {
-        if (post.getId() == 0) {
-            post.setId(POST_ID.incrementAndGet());
-        }
-        posts.put(post.getId(), post);
+        posts.values();
     }
 
     public Post findById(int id) {
@@ -93,10 +82,7 @@ public class MemStore implements Store {
     }
 
     public void save(Candidate candidate) {
-        if (candidate.getId() == 0) {
-            candidate.setId(CANDIDATE_ID.incrementAndGet());
-        }
-        candidates.put(candidate.getId(), candidate);
+       candidates.values();
     }
 
     public Candidate findByIdCandidate(int id) {
