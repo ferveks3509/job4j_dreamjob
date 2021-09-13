@@ -23,6 +23,14 @@
 
     <title>Работа мечты</title>
 </head>
+<script>
+    function validate() {
+        if ($('#post').val() == '') {
+            alert($('#post').attr('title'));
+        }
+        return false
+    }
+</script>
 <body>
 <%
     String id = request.getParameter("id");
@@ -63,10 +71,10 @@
             <div class="card-body">
                 <form action="<%=request.getContextPath()%>/posts.do?id=<%=post.getId()%>" method="post">
                 <div class="form-group">
-                        <label>Имя</label>
-                        <input type="text" class="form-control" name="name" value="<%=post.getName()%>">
+                        <label>Название вакансии</label>
+                        <input type="text" class="form-control" title="Enter vacancy" id="post" name="name" value="<%=post.getName()%>">
                     </div>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="submit" onclick="return validate();" class="btn btn-primary">Сохранить</button>
                 </form>
             </div>
         </div>
