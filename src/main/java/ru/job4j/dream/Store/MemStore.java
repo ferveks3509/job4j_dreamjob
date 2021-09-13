@@ -23,9 +23,6 @@ public class MemStore implements Store {
 
     private  Map<Integer, Post> posts = new ConcurrentHashMap<>();
     private  Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
-    {
-        candidates.put(0, new Candidate(1,"name"));
-    }
     private  Map<Integer, User> users = new ConcurrentHashMap<>();
 
 
