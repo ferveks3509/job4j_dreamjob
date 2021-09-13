@@ -11,12 +11,10 @@ import ru.job4j.dream.Store.MemStore;
 import ru.job4j.dream.Store.PsqlStore;
 import ru.job4j.dream.Store.Store;
 import ru.job4j.dream.model.Candidate;
-import ru.job4j.dream.model.Post;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -36,13 +34,13 @@ public class CandidateServletTest {
         HttpServletRequest req = mock(HttpServletRequest.class);
         HttpServletResponse resp = mock(HttpServletResponse.class);
 
-        PowerMockito.when(req.getParameter("id")).thenReturn("0");
+        PowerMockito.when(req.getParameter("id")).thenReturn("1");
         PowerMockito.when(req.getParameter("name")).thenReturn("name");
 
         new PostServlet().doPost(req, resp);
 
-        Post result = store.findAllPosts().iterator().next();
+        Candidate result = store.findAllCandidates().iterator().next();
         assertThat(result.getName(), Is.is("name"));
-        assertThat(result.getId(), Is.is("0"));
+        assertThat((result.getId()), Is.is(1));
     }
 }
