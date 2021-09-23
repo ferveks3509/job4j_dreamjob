@@ -1,4 +1,5 @@
 # job4j_dreamjob
+[![Build Status](https://app.travis-ci.com/ferveks3509/job4j_dreamjob.svg?branch=master)](https://app.travis-ci.com/ferveks3509/job4j_dreamjob)
 #Функционал
 * Регистрация пользователя
 * Аутентификация на сервлет-фильтрах
