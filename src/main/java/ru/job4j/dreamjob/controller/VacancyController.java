@@ -34,7 +34,8 @@ public class VacancyController {
     public String create(HttpServletRequest request) {
         var title = request.getParameter("title");
         var description = request.getParameter("description");
-        vacancyService.save(new Vacancy(0, title, description, LocalDateTime.now()));
+        var visible = request.getParameter("visible");
+        vacancyService.save(new Vacancy(0, title, description, LocalDateTime.now(), Boolean.getBoolean(visible)));
         return "redirect:/vacancies";
     }
     @GetMapping("/{id}")
