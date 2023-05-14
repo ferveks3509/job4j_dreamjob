@@ -1,14 +1,15 @@
 package ru.job4j.dreamjob.repository.memory;
 
-import org.springframework.stereotype.Repository;
 import ru.job4j.dreamjob.model.Vacancy;
 import ru.job4j.dreamjob.repository.VacancyRepository;
 
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.concurrent.ConcurrentMap;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
-@Repository
+
 public class MemoryVacancyRepository implements VacancyRepository {
     private int nextId = 1;
 
