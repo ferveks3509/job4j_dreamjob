@@ -4,10 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.dreamjob.model.Vacancy;
+import ru.job4j.dreamjob.service.CityService;
 import ru.job4j.dreamjob.service.VacancyService;
-
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/vacancies")
@@ -15,8 +13,11 @@ public class VacancyController {
 
     private final VacancyService vacancyService;
 
-    public VacancyController(VacancyService vacancyService) {
+    private final CityService cityService;
+
+    public VacancyController(VacancyService vacancyService, CityService cityService) {
         this.vacancyService = vacancyService;
+        this.cityService = cityService;
     }
 
     @GetMapping
@@ -26,18 +27,17 @@ public class VacancyController {
     }
 
     @GetMapping("/create")
-    public String getCreationPage(){
+    public String getCreationPage(Model model) {
+        model.addAttribute("cities", cityService.findAll());
         return "vacancies/create";
     }
 
     @PostMapping("/create")
-    public String create(HttpServletRequest request) {
-        var title = request.getParameter("title");
-        var description = request.getParameter("description");
-        var visible = request.getParameter("visible");
-        vacancyService.save(new Vacancy(0, title, description, LocalDateTime.now(), Boolean.getBoolean(visible)));
+    public String create(@ModelAttribute Vacancy vacancy) {
+        vacancyService.save(vacancy);
         return "redirect:/vacancies";
     }
+
     @GetMapping("/{id}")
     public String getById(Model model, @PathVariable int id) {
         var vacancyOptional = vacancyService.findById(id);
@@ -45,6 +45,7 @@ public class VacancyController {
             model.addAttribute("message", "Вакансия с указанным идентификатором не найдена");
             return "errors/404";
         }
+        model.addAttribute("cities", cityService.findAll());
         model.addAttribute("vacancy", vacancyOptional.get());
         return "vacancies/one";
     }

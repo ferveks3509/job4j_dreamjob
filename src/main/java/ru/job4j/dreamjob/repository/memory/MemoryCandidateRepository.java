@@ -18,12 +18,12 @@ public class MemoryCandidateRepository implements CandidateRepository {
     private final Map<Integer, Candidate> candidates = new HashMap<>();
 
     private MemoryCandidateRepository() {
-        save(new Candidate(0, "Intern", "desc", LocalDateTime.now()));
-        save(new Candidate(0, "Junior", "desc", LocalDateTime.now()));
-        save(new Candidate(0, "Junior+", "desc", LocalDateTime.now()));
-        save(new Candidate(0, "Middle", "desc", LocalDateTime.now()));
-        save(new Candidate(0, "Middle+", "desc", LocalDateTime.now()));
-        save(new Candidate(0, "Senior", "desc", LocalDateTime.now()));
+        save(new Candidate(0, "Intern", "desc", LocalDateTime.now(), 1));
+        save(new Candidate(0, "Junior", "desc", LocalDateTime.now(), 1));
+        save(new Candidate(0, "Junior+", "desc", LocalDateTime.now(), 1));
+        save(new Candidate(0, "Middle", "desc", LocalDateTime.now(), 1));
+        save(new Candidate(0, "Middle+", "desc", LocalDateTime.now(), 1));
+        save(new Candidate(0, "Senior", "desc", LocalDateTime.now(), 1));
     }
 
     @Override
@@ -44,7 +44,8 @@ public class MemoryCandidateRepository implements CandidateRepository {
                 oldCandidate.getId(),
                 candidate.getName(),
                 candidate.getDescription(),
-                candidate.getCreationDate())) != null;
+                candidate.getCreationDate(),
+                candidate.getCityId())) != null;
     }
 
     @Override
