@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.job4j.dreamjob.dto.FileDto;
 import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.service.CandidateService;
 import ru.job4j.dreamjob.service.CityService;
@@ -44,9 +45,9 @@ public class CandidateController {
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute Candidate candidate, Model model) {
+    public String create(@ModelAttribute Candidate candidate, @RequestParam MultipartFile file, Model model) {
         try {
-            candidateService.save(candidate);
+            candidateService.save(candidate,new FileDto(file.getOriginalFilename(), file.getBytes()));
             return "redirect:/candidates";
         } catch (Exception exception) {
             model.addAttribute("message", exception.getMessage());
@@ -55,9 +56,9 @@ public class CandidateController {
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute Candidate candidate, Model model) {
+    public String update(@ModelAttribute Candidate candidate, @RequestParam MultipartFile file, Model model) {
         try {
-            var isUpdate = candidateService.update(candidate);
+            var isUpdate = candidateService.update(candidate, new FileDto(file.getOriginalFilename(), file.getBytes()));
             if (!isUpdate) {
                 model.addAttribute("message", "Кандидат с указанным индификатором не найден");
                 return "errors/404";
